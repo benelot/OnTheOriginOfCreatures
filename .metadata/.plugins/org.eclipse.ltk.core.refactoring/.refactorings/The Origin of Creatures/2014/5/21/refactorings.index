@@ -1,0 +1,31 @@
+1400510292203	Delete elements
+1400512775883	Encapsulate field 'articuloGenePitch'
+1400512790941	Encapsulate field 'articuloGeneYaw'
+1400521634379	Delete element
+1400525985425	Encapsulate field 'neuronInputs'
+1400527199161	Copy compilation unit
+1400528256889	Encapsulate field 'bodyPart'
+1400528262397	Encapsulate field 'collisionBody'
+1400528380559	Encapsulate field 'joint'
+1400539617182	Delete element
+1400577569157	Rename method 'getGenomeSize'
+1400582483346	Rename field 'GENOME_INITIAL_LINK_WEIGHTS'
+1400594227849	Rename method 'nextInt'
+1400660475220	Rename local variable 'summator'
+1400660703474	Rename local variable 'minimum'
+1400660714550	Rename local variable 'minimizer'
+1400660801510	Rename local variable 'minimum'
+1400660814121	Rename local variable 'minimizer'
+1400661277444	Encapsulate field 'pitchAxon'
+1400661282288	Encapsulate field 'yawAxon'
+1400661286231	Encapsulate field 'rollAxon'
+1400697831953	Copy compilation unit
+1400710616417	Encapsulate field 'angle'
+1400710635261	Encapsulate field 'minLimit'
+1400710643042	Encapsulate field 'maxLimit'
+1400710649970	Encapsulate field 'maxForce'
+1400710657259	Encapsulate field 'axon'
+1400711375426	Encapsulate field 'articulationType'
+1400711409119	Encapsulate field 'pitchComponent'
+1400785183488	Encapsulate field 'motorceptor'
+1400785298296	Delete element

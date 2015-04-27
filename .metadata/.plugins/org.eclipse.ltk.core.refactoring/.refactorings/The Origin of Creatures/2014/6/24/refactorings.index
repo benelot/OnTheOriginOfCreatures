@@ -1,0 +1,60 @@
+1402232732888	Rename package 'neuronets'
+1402232813450	Move compilation units
+1402232848510	Move compilation units
+1402232853548	Delete element
+1402232878193	Move compilation units
+1402232881744	Delete element
+1402232923150	Move compilation units
+1402232927031	Delete element
+1402234444832	Move compilation units
+1402234450589	Delete element
+1402234527066	Move compilation units
+1402234544472	Rename package 'evolution.creature.fitness'
+1402234555516	Move compilation units
+1402234559643	Delete element
+1402234576145	Move compilation units
+1402234603098	Move compilation units
+1402234607001	Delete element
+1402234645054	Rename package 'entities'
+1402234656170	Rename package 'evolution.creature'
+1402234668106	Rename package 'evolution.creature.genetics'
+1402234681858	Rename package 'evolution.creature.juries'
+1402234690722	Rename package 'evolution.creature.genetics.genetypes'
+1402234715349	Move compilation units
+1402234720188	Delete element
+1402234777254	Move compilation units
+1402234844618	Move compilation unit
+1402234865732	Move compilation units
+1402234912855	Move compilation unit
+1402234928006	Move compilation units
+1402234972319	Move compilation unit
+1402234978260	Delete element
+1402234980750	Delete element
+1402234983129	Delete element
+1402235001816	Move compilation units
+1402235012823	Move compilation units
+1402235016386	Delete element
+1402235019034	Delete element
+1402235078061	Move compilation units
+1402235120578	Delete element
+1402235162502	Move compilation units
+1402235166752	Delete element
+1402235185101	Move compilation units
+1402235188560	Delete element
+1402239285015	Rename field 'GENOME_ARTICULOGENE_MAX_FORCE'
+1402240256803	Copy compilation unit
+1402240271529	Rename type 'MotorTensioGene'
+1402256501639	Rename method 'createLimb'
+1402256582763	Rename type 'JointComponent'
+1402260284856	Rename field 'pitchExtComponent'
+1402260298997	Rename field 'pitchFlexComponent'
+1402260311567	Rename field 'yawExtComponent'
+1402260326957	Rename field 'yawFlexComponent'
+1402260337291	Rename field 'rollExtComponent'
+1402260346966	Rename field 'rollFlexComponent'
+1402266231341	Copy compilation unit
+1402266254999	Rename type 'TestSimplePhysics'
+1402266275266	Rename type 'TestCreature'
+1402275496411	Encapsulate field 'position'
+1402277560147	Move compilation unit
+1402334852808	Rename local variable 'geneIndex'

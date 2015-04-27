@@ -1,0 +1,5 @@
+package evolution.creatures.morphology.joints;
+
+public class JointjME3 extends Joint {
+
+}

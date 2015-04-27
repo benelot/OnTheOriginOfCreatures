@@ -1,0 +1,75 @@
+package evolution.creatures.morphology.joints;
+
+import java.util.ArrayList;
+
+import com.jme3.bullet.joints.SixDofJoint;
+
+import configuration.PhysicsConfiguration;
+import evolution.creatures.genetics.genetypes.ArticuloGene;
+import evolution.creatures.genetics.genetypes.ArticuloGene.ArticulationType;
+import evolution.creatures.morphology.Component;
+
+public class SaddleJointjME3 extends JointjME3 implements SaddleJoint {
+
+	public SaddleJointjME3(ArticuloGene gene) {
+		super(gene.getPosX1(), gene.getPosY1(), gene.getPosZ1(), gene.getNormalX1(), gene.getNormalY1(), gene.getNormalZ1(), gene.getDirX1(), gene.getDirY1(),
+				gene.getDirZ1(), gene.getPosX2(), gene.getPosY2(), gene.getPosZ2(), gene.getNormalX2(), gene.getNormalY2(), gene.getNormalZ2(),
+				gene.getDirX2(), gene.getDirY2(), gene.getDirZ2(), gene.getMusculoGenePitchExt(), gene.getMusculoGenePitchFlex(), gene.getMusculoGeneYawExt(),
+				gene.getMusculoGeneYawFlex(), null, null);
+		setArticulationType(ArticulationType.SADDLE);
+		// TODO Auto-generated constructor stub
+	}
+
+	private SixDofJoint joint;
+
+	@Override
+	public void exertPitchForce(double extForce, double flexForce) {
+		// is extForce higher than max force or lower than 0?
+		extForce = (extForce > pitchExtMuscle.getMaxForce()) ? pitchExtMuscle.getMaxForce() : extForce;
+		extForce = (extForce < 0) ? 0 : extForce;
+
+		// is flexForce higher than max force or lower than 0?
+		flexForce = (flexForce > pitchFlexMuscle.getMaxForce()) ? pitchFlexMuscle.getMaxForce() : flexForce;
+		flexForce = (flexForce < 0) ? 0 : flexForce;
+
+		joint.getRotationalLimitMotor(PhysicsConfiguration.PHYSICS_JOINT_PITCH).setMaxMotorForce((float) Math.abs(extForce - flexForce));
+
+		// joint.getRotationalLimitMotor(PhysicsConfiguration.PHYSICS_JOINT_PITCH).setDamping((float)
+		// Math.min(extForce, flexForce));
+
+		joint.getRotationalLimitMotor(PhysicsConfiguration.PHYSICS_JOINT_PITCH).setTargetVelocity(
+				(float) (Math.signum(extForce - flexForce) * Math.abs(joint.getRotationalLimitMotor(PhysicsConfiguration.PHYSICS_JOINT_PITCH)
+						.getTargetVelocity())));
+
+	}
+
+	@Override
+	public void exertYawForce(double extForce, double flexForce) {
+		// is extForce higher than max force or lower than 0?
+		extForce = (extForce > yawExtMuscle.getMaxForce()) ? yawExtMuscle.getMaxForce() : extForce;
+		extForce = (extForce < 0) ? 0 : extForce;
+
+		// is flexForce higher than max force or lower than 0?
+		flexForce = (flexForce > yawFlexMuscle.getMaxForce()) ? yawFlexMuscle.getMaxForce() : flexForce;
+		flexForce = (flexForce < 0) ? 0 : flexForce;
+
+		joint.getRotationalLimitMotor(PhysicsConfiguration.PHYSICS_JOINT_YAW).setMaxMotorForce((float) Math.abs(extForce - flexForce));
+
+		// joint.getRotationalLimitMotor(PhysicsConfiguration.PHYSICS_JOINT_PITCH).setDamping((float)Math.min(extForce,
+		// flexForce));
+
+		joint.getRotationalLimitMotor(PhysicsConfiguration.PHYSICS_JOINT_YAW).setTargetVelocity(
+				(float) (Math.signum(extForce - flexForce) * Math
+						.abs(joint.getRotationalLimitMotor(PhysicsConfiguration.PHYSICS_JOINT_YAW).getTargetVelocity())));
+	}
+
+	@Override
+	public ArrayList<Component> getAllJointComponents() {
+		ArrayList<Component> jointComponents = new ArrayList<Component>();
+		jointComponents.add(pitchExtMuscle);
+		jointComponents.add(pitchFlexMuscle);
+		jointComponents.add(yawExtMuscle);
+		jointComponents.add(yawFlexMuscle);
+		return jointComponents;
+	}
+}

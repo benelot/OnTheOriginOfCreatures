@@ -1,0 +1,108 @@
+package genetics;
+
+import genetics.ArticuloGene.ArticulationType;
+import genetics.EffectoGene.EffectoType;
+
+import java.util.ArrayList;
+
+import configuration.CreatureConfiguration;
+import configuration.GeneticsConfiguration;
+import configuration.GeneticsConfiguration.GeneType;
+
+public class Genome {
+
+	/*
+	 * The genetic representation of this morphology is a directed graph of
+	 * nodes and connections. Each graph contains the developmental instructions
+	 * for growing a creature, and provides a way of reusing instructions to
+	 * make similar or recursive components within the creature. A phenotype
+	 * hierarchy of parts is made from a graph by starting at a defined
+	 * root-node and synthesizing parts from the node information while tracing
+	 * through the connections of the graph. The graph can be recurrent. Nodes
+	 * can connect to themselves or in cycles to form recursive or fractal like
+	 * structures. They can also connect to the same child multiple times to
+	 * make duplicate instances of the same appendage.
+	 */
+	MorphoGene morphoRoot;
+	int genomeSize;
+	ArrayList<EffectoGene> effectoGenes;
+	ArrayList<ExteroceptoGene> exteroceptoGenes;
+	ArrayList<MorphoGene> morphoGenes;
+	ArrayList<NeuroGene> neuroGenes;
+	ArrayList<ProprioceptoGene> proprioceptoGenes;
+
+	public void createRandomGenome() {
+		morphoRoot = new MorphoGene();
+		morphoGenes = new ArrayList<>();
+		neuroGenes = new ArrayList<>();
+		effectoGenes = new ArrayList<>();
+		exteroceptoGenes = new ArrayList<>();
+		proprioceptoGenes = new ArrayList<>();
+		morphoRoot
+				.setDimensions(
+						Math.random()
+								* CreatureConfiguration.CREATURE_BODYPART_MAXSIZE,
+						Math.random()
+								* CreatureConfiguration.CREATURE_BODYPART_MAXSIZE,
+						Math.random()
+								* CreatureConfiguration.CREATURE_BODYPART_MAXSIZE);
+		morphoGenes.add(morphoRoot);
+
+		double continueExtension = Math.random();
+		while (continueExtension > GeneticsConfiguration.GENOME_EXTENSION_PROBABILITY) {
+			addRandomGene(morphoRoot);
+		}
+	}
+
+	void addRandomGene(Gene fatherGene) throws Exception {
+		// if the father gene can not be extended, then stop recursion.
+		if (fatherGene.extendWith.size() == 0) {
+			return;
+		}
+		// get a randomly chosen gene type out of the possible options
+		GeneType geneType = (GeneType) fatherGene.extendWith.toArray()[(int) Math
+				.random() * GeneType.values().length];
+
+		// a new gene or an old one?
+		boolean newGene = (Math.round(Math.random()) == 1) ? true : false;
+		switch (geneType) {
+		case EFFECTOGENE:
+			EffectoGene effectoGene;
+			if (newGene) {
+				effectoGene = new EffectoGene(
+						EffectoType.values()[(int) Math.random()
+								* EffectoType.values().length]);
+				fatherGene.getLinkedGenes().add(effectoGene);
+				effectoGenes.add(effectoGene);
+				addRandomGene(effectoGene);
+			} else {
+				effectoGene = (EffectoGene) effectoGenes.toArray()[(int) Math
+						.random() * effectoGenes.size()];
+				fatherGene.getLinkedGenes().add(effectoGene);
+				addRandomGene(fatherGene);
+
+			}
+			break;
+		case EXTEROCEPTOGENE:
+			break;
+		case MORPHOGENE:
+			break;
+		case NEUROGENE:
+			break;
+		case PROPRIOCEPTOGENE:
+			break;
+		case RECURSOGENE:
+			break;
+		case ARTICULOGENE:
+		case MOTORCEPTOGENE:
+		case ACTUATOGENE:
+			throw new Exception(
+					"Illegal choice of gene. ArticuloGene, MotorceptoGene and ActuatoGene are part of the MorphoGene.");
+		}
+		double continueExtension = Math.random();
+		if (continueExtension > GeneticsConfiguration.GENOME_EXTENSION_PROBABILITY) {
+			addRandomGene(fatherGene);
+		}
+	}
+
+}

@@ -1,0 +1,20 @@
+package evolution.creatures.morphology.joints;
+
+import evolution.creatures.genetics.genetypes.ArticuloGene;
+
+/**
+ * Pivot Joint, allow only for rotation movement
+ * 
+ * @author leviathan
+ * 
+ */
+public interface PivotJoint extends Joint {
+	public PivotJoint(ArticuloGene gene) {
+		super(gene.getPosX1(), gene.getPosY1(), gene.getPosZ1(), gene.getNormalX1(), gene.getNormalY1(), gene.getNormalZ1(), gene.getDirX1(), gene.getDirY1(),
+				gene.getDirZ1(), gene.getPosX2(), gene.getPosY2(), gene.getPosZ2(), gene.getNormalX2(), gene.getNormalY2(), gene.getNormalZ2(),
+				gene.getDirX2(), gene.getDirY2(), gene.getDirZ2(),
+				null, null, null, null, gene.getMusculoGeneRollExt(),gene.getMusculoGeneRollFlex());
+	}
+
+	public abstract void exertRollForce(double extForce, double flexForce);
+}

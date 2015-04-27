@@ -1,0 +1,19 @@
+package evolution.creatures.morphology.joints;
+
+import evolution.creatures.genetics.genetypes.ArticuloGene;
+import evolution.creatures.genetics.genetypes.ArticuloGene.ArticulationType;
+
+/**
+ * Saddle Joint, biaxial with a greater scope for rotation (eg.
+ * carpometacarpale)
+ * 
+ * @author leviathan
+ * 
+ */
+public interface SaddleJoint {
+
+
+	public abstract void exertPitchForce(double extForce, double flexForce);
+
+	public abstract void exertYawForce(double extForce, double flexForce);
+}

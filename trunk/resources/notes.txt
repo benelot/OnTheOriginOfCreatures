@@ -1,0 +1,1 @@
+Control of muscle contraction force is accomplished by controlling how many motor units are activated for a given motion [Motor unit]

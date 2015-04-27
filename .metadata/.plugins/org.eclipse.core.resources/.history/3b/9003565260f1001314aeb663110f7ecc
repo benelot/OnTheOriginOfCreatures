@@ -1,0 +1,150 @@
+package evolution.creatures.genetics;
+
+import java.util.ArrayList;
+import java.util.Iterator;
+
+import misc.utils.Pair;
+import configuration.FitnessConfiguration.JuryType;
+import evolution.Evolution;
+import evolution.creatures.Creature;
+import evolution.creatures.juries.Following;
+import evolution.creatures.juries.Jumping;
+import evolution.creatures.juries.Moving;
+import evolution.creatures.juries.Velocity;
+import evolution.environments.Environment;
+
+public class Population {
+
+	/*
+	 * Alternatively, fitness could be defined in a more biologically realistic
+	 * way by allowing populations of virtual creatures to compete against each
+	 * other within a physically simulated changing world. Competition has been
+	 * shown to facilitate complexity, specialization, or even social
+	 * interactions [17,22]. It becomes difficult to define explicit evaluations
+	 * that can select for “interesting” behavior, but perhaps systems like
+	 * these could help produce such results.
+	 */
+
+	public <T extends Creature> Population(Evolution evolution, int populationSize, Class<T> creatureClass, Environment environment) {
+		desiredSize = populationSize;
+		creatures = new ArrayList<>();
+		this.environment = environment;
+		juries = new ArrayList<>();
+		initialize(creatureClass);
+	}
+
+	/**
+	 * @return the environment
+	 */
+	public Environment getEnvironment() {
+		return environment;
+	}
+
+	private int desiredSize;
+	private Environment environment;
+
+	public int getDesiredSize() {
+		return desiredSize;
+	}
+
+	/**
+	 * @param desiredSize
+	 *            the desiredSize to set
+	 */
+	public void setDesiredSize(int desiredSize) {
+		this.desiredSize = desiredSize;
+	}
+
+	public void addFitnessFunction(JuryType juryType, int weight) {
+		juries.add(new Pair<JuryType, Integer>(juryType, weight));
+
+	}
+
+	private ArrayList<Pair<JuryType, Integer>> juries;
+
+	public <T extends Creature> void initialize(Class<T> creatureClass) {
+		creatures.clear();
+		for (int i = 0; i < desiredSize; i++) {
+			Creature creature = null;
+			try {
+				creature = creatureClass.newInstance();
+			} catch (InstantiationException e) {
+				e.printStackTrace();
+			} catch (IllegalAccessException e) {
+				e.printStackTrace();
+			}
+
+			Iterator<Pair<JuryType, Integer>> juriesIterator = juries.iterator();
+			while (juriesIterator.hasNext()) {
+				Pair<JuryType, Integer> pair = (Pair<JuryType, Integer>) juriesIterator.next();
+				switch (pair.x) {
+				case FOLLOWING:
+					creature.addJury(new Following(pair.y));
+					break;
+				case JUMPING:
+					creature.addJury(new Jumping(pair.y));
+					break;
+				case MOVING:
+					creature.addJury(new Moving(pair.y));
+					break;
+				case VELOCITY:
+					creature.addJury(new Velocity(pair.y));
+					break;
+				default:
+					break;
+
+				}
+			}
+
+			creatures.add(creature);
+		}
+
+	}
+
+	private ArrayList<Creature> creatures;
+
+	/**
+	 * @return the creatures
+	 */
+	public ArrayList<Creature> getCreatures() {
+		return creatures;
+	}
+
+	public int size() {
+		return creatures.size();
+	}
+
+	public void print() {
+		minGenes = Integer.MAX_VALUE;
+		maxGenes = 0;
+		creatureGenesQty = 0;
+		Iterator<Creature> creatureIterator = creatures.iterator();
+		while (creatureIterator.hasNext()) {
+			Creature creature = creatureIterator.next();
+			minGenes = (minGenes > creature.getGenotype().size())?creature.getGenotype().size():minGenes;
+			maxGenes = (maxGenes < creature.getGenotype().size())?creature.getGenotype().size():maxGenes;
+			creatureGenesQty += creature.getGenotype().size();
+			creature.print();
+			System.out.println("--------------------------");
+			System.out.println();
+			System.out.println();
+			System.out.println();
+			System.out.println();
+			System.out.println("--------------------------");
+		}
+		avgGenes = creatureGenesQty / ((float)size());
+		
+		System.out.println("Population size: "+size());
+		System.out.println("Minimum number of genes: "+minGenes);
+		System.out.println("Average number of genes: "+avgGenes);
+		System.out.println("Maximum number of genes: "+maxGenes);
+		
+	}
+	
+	//statistics
+	int creatureGenesQty;
+	int maxGenes;
+	int minGenes;
+	float avgGenes;
+
+}

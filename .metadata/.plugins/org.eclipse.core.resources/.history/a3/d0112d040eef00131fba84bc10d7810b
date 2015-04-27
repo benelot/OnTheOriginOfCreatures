@@ -1,0 +1,14 @@
+package neuronets.neuronfunctions;
+
+import java.util.Map;
+
+public class NeuroIntegrate implements NeuronFunction {
+
+	@Override
+	public double perform(Map<Integer, Double> axon) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+
+}

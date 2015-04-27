@@ -1,0 +1,231 @@
+package evolution.creatures.morphology;
+
+import java.util.Hashtable;
+import java.util.Iterator;
+
+import com.jme3.bullet.PhysicsSpace;
+import com.jme3.bullet.collision.shapes.BoxCollisionShape;
+import com.jme3.bullet.collision.shapes.CapsuleCollisionShape;
+import com.jme3.bullet.control.RigidBodyControl;
+import com.jme3.bullet.joints.PhysicsJoint;
+import com.jme3.bullet.joints.SixDofJoint;
+import com.jme3.math.Matrix3f;
+import com.jme3.math.Vector3f;
+import com.jme3.scene.Node;
+import com.jme3.scene.shape.Box;
+
+import configuration.GeneticsConfiguration.GeneType;
+import configuration.PhysicsConfiguration;
+import evolution.creatures.genetics.*;
+import evolution.creatures.genetics.genetypes.*;
+import evolution.creatures.genetics.genetypes.ArticuloGene.ArticulationType;
+import evolution.creatures.morphology.joints.*;
+import evolution.creatures.morphology.neuronalnets.Neuron;
+import evolution.creatures.morphology.sensors.Sensor;
+import evolution.creatures.morphology.sensors.exteroceptors.*;
+import evolution.creatures.morphology.sensors.proprioceptors.*;
+import misc.samples.PhysicsTestHelper;
+
+/**
+ * The class PhenotypejME3 is the jmonkey specific implementation of Phenotype
+ * 
+ * @author leviathan
+ * 
+ */
+public class PhenotypejME3 extends Phenotype {
+
+	public PhenotypejME3() {
+		super();
+	}
+
+	@Override
+	public void buildPhenotypeFromGenotype(Genome genotype) {
+		// add components to the phenotype
+		for (int geneNumber = 0; geneNumber < genotype.getGenes().size(); geneNumber++) {
+			addComponent(genotype.getGenes().get(geneNumber));
+		}
+		// transfer the links into a valid phenotype
+		for (int geneNumber = 0; geneNumber < genotype.getGenes().size(); geneNumber++) {
+			// transferConnections(genotype, geneNumber);
+		}
+	}
+
+	@Override
+	public void addComponent(Gene gene) {
+		Component component = null;
+		switch (gene.getGeneType()) {
+		case EXTEROCEPTOGENE:
+			switch (((ExteroceptoGene) gene).getType()) {
+			case TACTION:
+				component = new TactileReceptorjME3();
+				getComponents().add(component);
+				break;
+			case VISION:
+				component = new PhotoReceptorjME3();
+				getComponents().add(component);
+				break;
+			}
+			break;
+		case MORPHOGENE:
+			// create a new limb
+			component = new LimbjME3(((MorphoGene) gene).getLength(), ((MorphoGene) gene).getWidth(), ((MorphoGene) gene).getHeight());
+			getComponents().add(component);
+			break;
+		case NEUROGENE:
+			component = new Neuron((NeuroGene) gene);
+			getComponents().add(component);
+			break;
+		case ARTICULOGENE:
+			ArticuloGene articuloGene = ((ArticuloGene) gene);
+			switch (articuloGene.getArticulationType()) {
+			case HINGE:
+				component = new HingeJointjME3(articuloGene);
+				break;
+			case PIVOT:
+				component = new PivotJointjME3(articuloGene);
+				break;
+			case RIGID:
+				component = new RigidJointjME3(articuloGene);
+				break;
+			case SADDLE:
+				component = new SaddleJointjME3(articuloGene);
+				break;
+			case SPHEROIDAL:
+				component = new SpheroidalJointjME3(articuloGene);
+
+				break;
+
+			}
+			getComponents().add(component);
+			getComponents().addAll(((Joint) component).getAllJointComponents());
+			break;
+		default:
+			/* Concerns for EFFECTOGENE,MUSCULOGENE,PROPRIOCEPTOGENE */
+			break;
+		}
+	}
+
+	@Override
+	public void transferConnections(Genome genotype, int index) {
+		Gene gene = genotype.getGenes().get(index);
+
+		// Iterator<Integer> axonIterator =
+		// gene.getLinkedGeneWeights().keySet().iterator();
+		// while (axonIterator.hasNext()) {
+		// int linkIndex = axonIterator.next();
+		// Gene gene2 = genotype.getGenes().get(linkIndex);
+		// if(isValidLink(gene.getGeneType(), gene2.getGeneType()))
+		// {
+		//
+		// }
+		// }
+		Iterator<Integer> axonIterator = gene.getLinkedGeneWeights().keySet().iterator();
+
+		switch (gene.getGeneType()) {
+		case ARTICULOGENE:
+			// find the first two body parts and connect them via the specified joint
+			axonIterator = gene.getLinkedGeneWeights().keySet().iterator();
+			Hashtable<Integer, Double> connections = new Hashtable<>();
+			while (axonIterator.hasNext()) {
+				int linkIndex = axonIterator.next();
+				Gene gene2 = genotype.getGenes().get(linkIndex);
+				if (gene2.getGeneType().equals(GeneType.MORPHOGENE)) {
+					connections.put(linkIndex, gene.getLinkedGeneWeights().get(linkIndex));
+				}
+				if (connections.keySet().size() == 2) {
+					break;
+				}
+
+			}
+
+			JointjME3 joint = ((JointjME3) getComponents().get(index));
+			LimbjME3 limb1 = (LimbjME3) getComponents().get((int) connections.keySet().toArray()[0]);
+			LimbjME3 limb2 = (LimbjME3) getComponents().get((int) connections.keySet().toArray()[1]);
+			joint.joinLimbs(limb1.getLimbNode(), limb2.getLimbNode());
+			// TODO: Find a way to add the two limbs to the joint
+			break;
+		case EFFECTOGENE:
+			break;
+		case EXTEROCEPTOGENE:
+		case NEUROGENE:
+		case PROPRIOCEPTOGENE:
+			axonIterator = gene.getLinkedGeneWeights().keySet().iterator();
+			while (axonIterator.hasNext()) {
+				int linkIndex = axonIterator.next();
+				Gene gene2 = genotype.getGenes().get(linkIndex);
+				if (isValidLink(gene.getGeneType(), gene2.getGeneType())) {
+					getComponents().get(index).getAxon().put(linkIndex, gene.getLinkedGeneWeights().get(linkIndex));
+				}
+			}
+			break;
+		case MORPHOGENE:
+			axonIterator = gene.getLinkedGeneWeights().keySet().iterator();
+			while (axonIterator.hasNext()) {
+				int linkIndex = axonIterator.next();
+				Gene gene2 = genotype.getGenes().get(linkIndex);
+				if (gene2.getGeneType().equals(GeneType.EXTEROCEPTOGENE)) {
+					((LimbjME3) getComponents().get(index)).getSensors().add((Sensor) getComponents().get(linkIndex));
+				}
+			}
+			break;
+		case MUSCULOGENE:
+			break;
+
+		}
+		// // transfer axon connections
+		// while (axonIterator.hasNext()) {
+		// int linkIndex = axonIterator.next();
+		// if (isValidLink(getComponents().get(index).getGeneType(), getComponents().get(linkIndex).getGeneType())) {
+		// getComponents().get(index).getAxon().put(index, gene.getLinkedGeneWeights().get(index));
+		// }
+		// }
+	}
+
+	private boolean isValidLink(GeneType geneType, GeneType geneType2) {
+
+		boolean axonIsOfDonatorGene = (geneType.equals(GeneType.ARTICULOGENE) || geneType.equals(GeneType.EXTEROCEPTOGENE)
+				|| geneType.equals(GeneType.NEUROGENE) || geneType.equals(GeneType.PROPRIOCEPTOGENE));
+		boolean dendriteIsOfAcceptorGene = (geneType2.equals(GeneType.ARTICULOGENE) || geneType2.equals(GeneType.NEUROGENE));
+
+		return (axonIsOfDonatorGene && dendriteIsOfAcceptorGene);
+	}
+
+	// TODO: Remove this method as soon as it is not needed anymore as a sample.
+	private void createRagDoll() {
+		Node shoulders;
+		Node uArmL;
+		Node uArmR;
+		Node lArmL;
+		Node lArmR;
+		Node body;
+		Node hips;
+		Node uLegL;
+		Node uLegR;
+		Node lLegL;
+		Node lLegR;
+
+		// joinLimbs
+
+		// creatureNode.attachChild(shoulders);
+		// creatureNode.attachChild(body);
+		// creatureNode.attachChild(hips);
+		// creatureNode.attachChild(uArmL);
+		// creatureNode.attachChild(uArmR);
+		// creatureNode.attachChild(lArmL);
+		// creatureNode.attachChild(lArmR);
+		// creatureNode.attachChild(uLegL);
+		// creatureNode.attachChild(uLegR);
+		// creatureNode.attachChild(lLegL);
+		// creatureNode.attachChild(lLegR);
+
+		// //add this to the reaper
+		// rootNode.attachChild(creatureNode);
+		// bulletAppState.getPhysicsSpace().addAll(creatureNode);
+	}
+
+	private Node creatureNode;
+
+	public Node getCreatureNode() {
+		return creatureNode;
+	}
+}

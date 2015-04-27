@@ -1,0 +1,330 @@
+package evolution.creatures.morphology.joints;
+
+import java.util.ArrayList;
+import com.jme3.bullet.joints.SixDofJoint;
+//import com.jme3.bullet.joints.SixDofSpringJoint;
+import com.jme3.bullet.joints.motors.RotationalLimitMotor;
+import configuration.PhysicsConfiguration;
+import configuration.GeneticsConfiguration.GeneType;
+import evolution.creatures.genetics.genetypes.ArticuloGene.ArticulationType;
+import evolution.creatures.genetics.genetypes.MusculoGene;
+import evolution.creatures.morphology.Component;
+
+public abstract class Joint extends Component {
+	/*
+	 * A joint-type determines the constraints on the relative motion between
+	 * this part and its parent by defining the number of degrees of freedom of
+	 * the joint and the movement allowed for each degree of freedom. The
+	 * different joint-types allowed are: rigid, revolute, twist, universal,
+	 * bend-twist, twist-bend, or spherical. Joint-limits determine the point
+	 * beyond which restoring spring forces will be exerted for each degree of
+	 * freedom.
+	 * 
+	 * Each connection also contains information. The placement of a child part
+	 * relative to its parent is decomposed into position, orientation, scale,
+	 * and reflection, so each can be mutated independently. The position of
+	 * attachment is constrained to be on the surface of the parent part.
+	 * Reflections cause negative scaling, and allow similar but symmetrical
+	 * sub-trees to be described. A terminal-only flag can cause a connection to
+	 * be applied only when the recursive limit is reached, and permits tail or
+	 * hand-like components to occur at the end of chains or repeating units.
+	 */
+	Joint(double posX1, double posY1, double posZ1, double normalX1, double normalY1, double normalZ1, double dirX1, double dirY1, double dirZ1, double posX2,
+			double posY2, double posZ2, double normalX2, double normalY2, double normalZ2, double dirX2, double dirY2, double dirZ2,
+			MusculoGene musculoGenePitchExt,MusculoGene musculoGenePitchFlex, MusculoGene musculoGeneYawExt, MusculoGene musculoGeneYawFlex, MusculoGene musculoGeneRollExt, MusculoGene musculoGeneRollFlex) {
+		super(GeneType.ARTICULOGENE);
+		this.posX1 = posX1;
+		this.posX2 = posX2;
+		this.posY1 = posY1;
+		this.posY2 = posY2;
+		this.posZ1 = posZ1;
+		this.posZ2 = posZ2;
+		
+		this.dirX1 = dirX1;
+		this.dirX2 = dirX2;
+		this.dirY1 = dirY1;
+		this.dirY2 = dirY2;
+		this.dirZ1 = dirZ1;
+		this.dirZ2 = dirZ2;
+		
+		this.normalX1 = normalX1;
+		this.normalX2 = normalX2;
+		this.normalY1 = normalY1;
+		this.normalY2 = normalY2;
+		this.normalZ1 = normalZ1;
+		this.normalZ2 = normalZ2;
+		
+
+		pitchExtMuscle = (musculoGenePitchExt != null)?new Muscle(musculoGenePitchExt.getMinLimit(), musculoGenePitchExt.getMaxLimit(), musculoGenePitchExt.getMaxForce()):null;
+		pitchFlexMuscle = (musculoGenePitchFlex != null)?new Muscle(musculoGenePitchFlex.getMinLimit(), musculoGenePitchFlex.getMaxLimit(), musculoGenePitchFlex.getMaxForce()):null;
+		yawExtMuscle = (musculoGeneYawExt != null)?new Muscle(musculoGeneYawExt.getMinLimit(), musculoGeneYawExt.getMaxLimit(), musculoGeneYawExt.getMaxForce()):null;
+		yawFlexMuscle = (musculoGeneYawFlex != null)?new Muscle(musculoGeneYawFlex.getMinLimit(), musculoGeneYawFlex.getMaxLimit(), musculoGeneYawFlex.getMaxForce()):null;
+		rollExtMuscle = (musculoGeneRollExt != null)?new Muscle(musculoGeneRollExt.getMinLimit(), musculoGeneRollExt.getMaxLimit(), musculoGeneRollExt.getMaxForce()):null;
+		rollFlexMuscle = (musculoGeneRollFlex != null)?new Muscle(musculoGeneRollFlex.getMinLimit(), musculoGeneRollFlex.getMaxLimit(), musculoGeneRollFlex.getMaxForce()):null;
+
+		// Joint with six degrees of freedom, we will only use 3 of them
+		
+		joint = new SixDofJoint(holderNode.getControl(RigidBodyControl.class), weightNode.getControl(RigidBodyControl.class), Vector3f.ZERO, new Vector3f(0f,
+				-1, 0f), true);
+		//TODO:Try to use SixDofSpringJoint
+
+		// fetch the reference for the rotational motors and enable them
+		/*
+		pitchMotor = joint1.getRotationalLimitMotor(PhysicsConfiguration.PHYSICS_JOINT_PITCH);
+		yawMotor = joint1.getRotationalLimitMotor(PhysicsConfiguration.PHYSICS_JOINT_ROLL);
+		rollMotor = joint1.getRotationalLimitMotor(PhysicsConfiguration.PHYSICS_JOINT_YAW);
+		pitchMotor.setEnableMotor(true);
+		yawMotor.setEnableMotor(true);
+		rollMotor.setEnableMotor(true);
+
+		// Default maxMotorForce is too weak to lift the weight node
+		pitchMotor.setMaxMotorForce(1);
+		yawMotor.setMaxMotorForce(1);
+		rollMotor.setMaxMotorForce(1);
+		
+
+		// physics simulation puts objects to sleep when moving slower than
+		// sleeping threshold. We do not want that.
+		//weightNodeControl.setAngularSleepingThreshold(0);
+		
+		//weightNodeControl.setGravity(new Vector3f((float) PhysicsConfiguration.PHYSICS_GRAVITY_X, (float) PhysicsConfiguration.PHYSICS_GRAVITY_Y,
+		//		(float) PhysicsConfiguration.PHYSICS_GRAVITY_Z));
+	}
+
+	public ArticulationType getArticulationType() {
+		return articulationType;
+	}
+
+	public void setArticulationType(ArticulationType articulationType) {
+		this.articulationType = articulationType;
+	}
+
+	public abstract ArrayList<Component> getAllJointComponents();
+
+	// current velocity for every axis
+	protected float desiredPitchVelocity = 0;
+	protected float desiredYawVelocity = 0;
+	protected float desiredRollVelocity = 0;
+
+	protected SixDofJoint joint1;
+	protected RotationalLimitMotor pitchMotor;
+	protected RotationalLimitMotor yawMotor;
+	protected RotationalLimitMotor rollMotor;
+
+	protected Muscle pitchExtMuscle;
+	protected Muscle pitchFlexMuscle;
+	protected Muscle yawExtMuscle;
+	protected Muscle yawFlexMuscle;
+	protected Muscle rollExtMuscle;
+	protected Muscle rollFlexMuscle;
+
+	private ArticulationType articulationType;
+
+	/**
+	 * position must be inside of the cube or on the surface values are between
+	 * 0 and 1 and are scaled by the length, width and height
+	 */
+	private double posX1;
+	private double posY1;
+	private double posZ1;
+	
+	private double posX2;
+	private double posY2;
+	private double posZ2;
+
+	/**
+	 * Normal serves as initial direction of the joint
+	 */
+	private double normalX1;
+	private double normalY1;
+	private double normalZ1;
+	
+	private double normalX2;
+	private double normalY2;
+	private double normalZ2;
+
+	/**
+	 * Direction of the primary axis of rotation
+	 */
+	private double dirX1;
+	private double dirY1;
+	private double dirZ1;
+	
+	private double dirX2;
+	private double dirY2;
+	private double dirZ2;
+	
+
+	/**
+	 * @return the posX1
+	 */
+	public double getPosX1() {
+		return posX1;
+	}
+
+	/**
+	 * @return the posY1
+	 */
+	public double getPosY1() {
+		return posY1;
+	}
+
+	/**
+	 * @return the posZ1
+	 */
+	public double getPosZ1() {
+		return posZ1;
+	}
+
+	/**
+	 * @return the posX2
+	 */
+	public double getPosX2() {
+		return posX2;
+	}
+
+	/**
+	 * @return the posY2
+	 */
+	public double getPosY2() {
+		return posY2;
+	}
+
+	/**
+	 * @return the posZ2
+	 */
+	public double getPosZ2() {
+		return posZ2;
+	}
+
+	/**
+	 * @return the normalX1
+	 */
+	public double getNormalX1() {
+		return normalX1;
+	}
+
+	/**
+	 * @return the normalY1
+	 */
+	public double getNormalY1() {
+		return normalY1;
+	}
+
+	/**
+	 * @return the normalZ1
+	 */
+	public double getNormalZ1() {
+		return normalZ1;
+	}
+
+	/**
+	 * @return the normalX2
+	 */
+	public double getNormalX2() {
+		return normalX2;
+	}
+
+	/**
+	 * @return the normalY2
+	 */
+	public double getNormalY2() {
+		return normalY2;
+	}
+
+	/**
+	 * @return the normalZ2
+	 */
+	public double getNormalZ2() {
+		return normalZ2;
+	}
+
+	/**
+	 * @return the dirX1
+	 */
+	public double getDirX1() {
+		return dirX1;
+	}
+
+	/**
+	 * @return the dirY1
+	 */
+	public double getDirY1() {
+		return dirY1;
+	}
+
+	/**
+	 * @return the dirZ1
+	 */
+	public double getDirZ1() {
+		return dirZ1;
+	}
+
+	/**
+	 * @return the dirX2
+	 */
+	public double getDirX2() {
+		return dirX2;
+	}
+
+	/**
+	 * @return the dirY2
+	 */
+	public double getDirY2() {
+		return dirY2;
+	}
+
+	/**
+	 * @return the dirZ2
+	 */
+	public double getDirZ2() {
+		return dirZ2;
+	}
+
+	/**
+	 * @return the pitchExtMuscle
+	 */
+	public Muscle getPitchExtMuscle() {
+		return pitchExtMuscle;
+	}
+
+	/**
+	 * @return the pitchFlexMuscle
+	 */
+	public Muscle getPitchFlexMuscle() {
+		return pitchFlexMuscle;
+	}
+
+	/**
+	 * @return the yawExtMuscle
+	 */
+	public Muscle getYawExtMuscle() {
+		return yawExtMuscle;
+	}
+
+	/**
+	 * @return the yawFlexMuscle
+	 */
+	public Muscle getYawFlexMuscle() {
+		return yawFlexMuscle;
+	}
+
+	/**
+	 * @return the rollExtMuscle
+	 */
+	public Muscle getRollExtMuscle() {
+		return rollExtMuscle;
+	}
+
+	/**
+	 * @return the rollFlexMuscle
+	 */
+	public Muscle getRollFlexMuscle() {
+		return rollFlexMuscle;
+	}
+
+	@Override
+	public void validate() {
+		// TODO:Autogenerated method stub
+	}
+}

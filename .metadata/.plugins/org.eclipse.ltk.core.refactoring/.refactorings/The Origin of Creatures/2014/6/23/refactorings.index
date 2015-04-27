@@ -1,0 +1,11 @@
+1401820797697	Delete element
+1402043510490	Encapsulate field 'maxForce'
+1402047391351	Encapsulate field 'axon'
+1402056954508	Delete element
+1402072162928	Rename local variable 'type'
+1402072496685	Rename method 'add'
+1402129450238	Rename local variable 'dendriteIterator'
+1402129477415	Rename local variable 'dendriteIterator'
+1402159264575	Rename type 'BodyPart'
+1402159290994	Rename type 'BodyPartjME3'
+1402159342619	Rename method 'join'

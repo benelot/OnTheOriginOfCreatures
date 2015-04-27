@@ -1,0 +1,47 @@
+package evolution.creatures.morphology.joints;
+
+import java.util.ArrayList;
+
+import com.jme3.bullet.joints.SixDofJoint;
+
+import configuration.PhysicsConfiguration;
+import evolution.creatures.genetics.genetypes.ArticuloGene;
+import evolution.creatures.morphology.Component;
+
+public class PivotJointjME3  extends JointjME3 implements PivotJoint {
+
+	public PivotJointjME3(ArticuloGene gene) {
+		super(gene);
+		// TODO Auto-generated constructor stub
+	}
+
+	private SixDofJoint joint;
+
+	@Override
+	public void exertRollForce(double extForce, double flexForce) {
+		// is extForce higher than max force or lower than 0?
+		extForce = (extForce > rollExtMuscle.getMaxForce()) ? rollExtMuscle.getMaxForce() : extForce;
+		extForce = (extForce < 0) ? 0 : extForce;
+
+		// is flexForce higher than max force or lower than 0?
+		flexForce = (flexForce > rollFlexMuscle.getMaxForce()) ? rollFlexMuscle.getMaxForce() : flexForce;
+		flexForce = (flexForce < 0) ? 0 : flexForce;
+
+		joint.getRotationalLimitMotor(PhysicsConfiguration.PHYSICS_JOINT_ROLL).setMaxMotorForce((float) Math.abs(extForce - flexForce));
+
+		// joint.getRotationalLimitMotor(PhysicsConfiguration.PHYSICS_JOINT_PITCH).setDamping((float)
+		// Math.min(extForce, flexForce));
+
+		joint.getRotationalLimitMotor(PhysicsConfiguration.PHYSICS_JOINT_ROLL).setTargetVelocity(
+				(float) (Math.signum(extForce - flexForce) * Math.abs(joint.getRotationalLimitMotor(PhysicsConfiguration.PHYSICS_JOINT_ROLL)
+						.getTargetVelocity())));
+	}
+
+	@Override
+	public ArrayList<Component> getAllJointComponents() {
+		ArrayList<Component> jointComponents = new ArrayList<Component>();
+		jointComponents.add(rollExtMuscle);
+		jointComponents.add(rollExtMuscle);
+		return jointComponents;
+	}
+}

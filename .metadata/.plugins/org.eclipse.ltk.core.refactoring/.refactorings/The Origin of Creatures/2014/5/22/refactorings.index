@@ -1,0 +1,26 @@
+1401102145583	Encapsulate field 'geneType'
+1401102897181	Encapsulate field 'genome'
+1401102950319	Encapsulate field 'genotype'
+1401104805869	Encapsulate field 'populationSize'
+1401105384640	Encapsulate field 'weight'
+1401105910036	Rename type 'Walking'
+1401105916208	Delete element
+1401110325486	Rename type 'Opensea'
+1401111386538	Copy compilation unit
+1401115254992	Move compilation unit
+1401115860476	Encapsulate field 'assetManager'
+1401115868133	Encapsulate field 'rootNode'
+1401117436999	Rename local variable 'node3'
+1401118888557	Delete element
+1401118920086	Rename method 'addFitnessFunction'
+1401132607957	Rename type 'FitnessFunctionType'
+1401132637374	Rename local variable 'fitnessFunctionType'
+1401132648319	Rename field 'fitnessFunctions'
+1401132662688	Rename local variable 'fitnessFunctionIterator'
+1401141487212	Rename field 'evaluationEnded'
+1401145401625	Rename field 'population'
+1401145549223	Rename field 'currentCreature'
+1401182404461	Rename method 'getPopulationSize'
+1401204722930	Move elements
+1401209914853	Copy compilation unit
+1401209932782	Move compilation unit

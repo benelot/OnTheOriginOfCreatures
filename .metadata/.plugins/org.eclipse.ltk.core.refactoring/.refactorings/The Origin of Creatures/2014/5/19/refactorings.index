@@ -1,0 +1,83 @@
+1399493062342	Delete element
+1399496160901	Delete element
+1399496187347	Move compilation unit
+1399496191590	Delete element
+1399496240930	Rename type 'MyGame'
+1399547282458	Rename type 'NeuroPhenotype'
+1399547539187	Move compilation unit
+1399547835175	Delete element
+1399547848951	Delete element
+1399547916285	Move compilation units
+1399547951801	Move compilation units
+1399547978266	Move compilation unit
+1399548371856	Encapsulate field 'genotype'
+1399548530855	Rename package 'morphology.sensors.proprioceptive'
+1399548539074	Rename package 'morphology.sensors.exteroceptive'
+1399550547499	Encapsulate field 'donator'
+1399550555364	Encapsulate field 'acceptor'
+1399550576896	Encapsulate field 'connectionStrength'
+1399551110410	Encapsulate field 'threshold'
+1399551193847	Rename type 'Threshold'
+1399557107691	Rename type 'Creatures'
+1399557179294	Move compilation unit
+1399557194101	Rename type 'Evolutionaire'
+1399557510488	Rename type 'BrickWall'
+1399559714820	Move compilation unit
+1399560157500	Rename type 'Birth'
+1399560219214	Rename type 'Reproduction'
+1399560230440	Rename type 'Generation'
+1399560279399	Rename type 'Birth'
+1399562724108	Encapsulate field 'length'
+1399562730121	Encapsulate field 'width'
+1399562735403	Encapsulate field 'height'
+1399563445356	Delete element
+1399563524758	Delete element
+1399563530687	Delete element
+1399563560167	Delete element
+1399565839686	Rename type 'Genotype'
+1399566409719	Encapsulate field 'recursiveLimit'
+1399567188459	Rename type 'SensoGene'
+1399567201196	Copy compilation unit
+1399567242297	Rename type 'ProprioCeptoGene'
+1399567263186	Rename type 'ExteroCeptoGene'
+1399568352296	Delete element
+1399568388825	Encapsulate field 'exteroceptoGene'
+1399568554812	Rename type 'JointGene'
+1399623967710	Rename type 'Tactor'
+1399623983113	Rename type 'Golgi'
+1399624490356	Encapsulate field 'type'
+1399624725316	Rename type 'TactileSensor'
+1399624789770	Rename type 'Eye'
+1399625064637	Rename type 'RotationSensor'
+1399625088874	Rename type 'MechanoReceptor'
+1399625098896	Rename type 'TactionReceptor'
+1399625207193	Encapsulate field 'type'
+1399625475505	Move compilation unit
+1399625608585	Rename type 'PhysicalCreature'
+1399625668549	Delete element
+1399625730103	Move compilation units
+1399625735028	Delete element
+1399625741942	Encapsulate field 'phenotype'
+1399633519402	Encapsulate field 'x'
+1399633527608	Encapsulate field 'y'
+1399633540346	Encapsulate field 'z'
+1399633685457	Delete element
+1399633852719	Move compilation units
+1399633896437	Rename type 'RidigJoint'
+1399633974138	Encapsulate field 'posX'
+1399633978819	Encapsulate field 'posY'
+1399633985145	Encapsulate field 'posZ'
+1399633989927	Encapsulate field 'dirX'
+1399633994834	Encapsulate field 'dirY'
+1399633999345	Encapsulate field 'dirZ'
+1399634069734	Encapsulate field 'articulationType'
+1399634492932	Rename type 'SattleJoint'
+1399645153526	Rename type 'GeneTypes'
+1399645554731	Rename local variable 'newType'
+1399648967682	Encapsulate field 'deeperGenes'
+1399648976477	Encapsulate field 'extendWith'
+1399651059205	Rename local variable 'newGene'
+1399651334161	Encapsulate field 'linkedGenes'
+1399652484918	Encapsulate field 'geneType'
+1399653985074	Rename local variable 'gene'
+1399654044524	Rename local variable 'gene'

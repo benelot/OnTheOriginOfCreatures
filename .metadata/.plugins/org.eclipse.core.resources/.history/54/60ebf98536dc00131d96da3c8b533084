@@ -1,0 +1,50 @@
+package neuronets;
+
+import java.util.ArrayList;
+import neuronets.neuronfunctions.NeuronFunction;
+
+public class Neuron {
+	
+	public Neuron(NeuronFunction neuronFunction) {
+		dendrite = new Dendrite();
+		this.neuronFunction = neuronFunction;
+	}
+
+	/*
+	 * Internal neural nodes are used to give virtual creatures the possibility
+	 * of arbitrary behavior. Ideally a creature should be able to have an
+	 * internal state beyond its sensor values, or be affected by its history.
+	 * different neural nodes can perform diverse functions on their inputs to
+	 * generate their output signals. Because of this, a creature’s brain might
+	 * resemble a dataflow computer program more than a typical neural
+	 * network. This approach is probably less biologically realistic than
+	 * just using sum and threshold functions, but it is hoped that it makes the
+	 * evolution of interesting behaviors more likely. The set of functions that
+	 * neural nodes can have is: sum, product, divide, sum-threshold,
+	 * greater-than, sign-of, min, max, abs, if, interpolate, sin, cos, atan,
+	 * log, expt, sigmoid, integrate, differentiate, smooth, memory,
+	 * oscillate-wave, and oscillate-saw. Some functions compute an output
+	 * directly from their inputs, while others such as the oscillators retain
+	 * some state and can give time varying outputs even when their inputs are
+	 * constant. The number of inputs to a neuron depends on its function, and
+	 * here is at most three. Each input contains a connection to another neuron
+	 * or a sensor from which to receive a value. Alternatively, an input can
+	 * simply receive a constant value. The input values are first scaled by
+	 * weights before being operated on. For each simulated time interval, every
+	 * neuron computes its output value from its inputs. In this work, two brain
+	 * time steps are performed for each dynamic simulation time step so signals
+	 * can propagate through multiple neurons with less delay.
+	 */
+
+	private ArrayList<NeuronalConnection> axon = new ArrayList<>();
+	private Dendrite dendrite;
+	private NeuronFunction neuronFunction;
+
+	private void performComputation() {
+		dendrite.sendSpike(neuronFunction.perform(axon));
+	}
+
+	public Dendrite getDendrite() {
+		return dendrite;
+	}
+}

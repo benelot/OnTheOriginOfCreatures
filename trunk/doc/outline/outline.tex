@@ -1,0 +1,31 @@
+\documentclass[11pt]{article}
+%Gummi|063|=)
+\title{\textbf{On the Origin of intelligence:\\ Evolving adaptively behaving creatures}}
+\author{Benjamin Ellenberger}
+\date{}
+\begin{document}
+
+\maketitle
+
+%AIM 1 sentence
+%WHY 1-2 sentences
+%METHODS 50 words
+%RESULTS
+%DISCUSSION/INTERPRETATION
+%CONCLUSION Bottom line
+%200 words
+
+The behavior of animals and humans is a complex combination of information processing and learning, decision making and motoric interaction with the environment. The information processing and learning are strongly coupled with the motoric actions, however it is not yet well understood how these segments are related in the animal brain.
+\\
+In this project we show how to evolve the control and morphology of a population of virtual creatures in a simulated three-dimensional, physically realistic world using genetic algorithms. Creatures are created from cuboid bounding-boxes connected using one of several biologically inspired joint models and the Hill-model for the muscle simulation and are controlled by simultaneously evolved neuronal network controllers. Further it is shown how to evaluate the creature with several fitness functions and to let the creature improve its performance via Hebbian learning to pick up correlations between the different signal channels.
+\\\\
+The genetic language to express the morphology and neuronal network configuration uses a directed cyclic graph representing genes and their interconnection. The genes are primitives for the morphological cuboids, joints and muscles, out of which the body is built, the neurons, the proprioceptive and exteroceptive sensors and the effectors.
+The genome can therefore define an infinite number of individual creatures in the highly dimensional search space showing an infinite number of possible behaviors. By evolving and evaluating over generations ,several successful behavior strategies can be found to perform well towards the goal that is measured by the fitness function.
+\\\\
+The neurons have multiple mathematical function primitives to speed up evolution as well as the biologicially inspired sum-threshold function. Hebbian Learning to optimize the performance via the Oja's learning rule will be used to see if the neuronal network can improve the performance.
+\\\\
+The fitness evaluation allows different fitness evaluation functions to be evaluated simultaneously and be combined to one rating via linear weighting.
+The idea behind this is to evaluate a primary goal and additionally an auxiliary fitness function measuring the existence of so called design principles for intelligent systems within the design of the creature. Further it is possible to evolve creatures for a certain task with the auxiliary fitness function measuring the transfer entropy in the creature's neuronal network. The transfer entropy was originally introduced to measure the magnitude and the direction of information flow from one element to another and has been used to analyze information flows in real time series data from neuroscience, robotics, and many other fields. This could be used to verify the hypothesis that stronger information flows indicate a more coordinated behavior of the creature and a higher ability to learn new tasks.
+\\\\
+The simulation is written in Java and simulated in a Open GL supported graphics engine called jMonkey engine and a rigid body dynamics engine called Bullet engine to simulate accurate physical interaction.
+\end{document}

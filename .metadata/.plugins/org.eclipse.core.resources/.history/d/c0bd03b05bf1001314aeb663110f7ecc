@@ -1,0 +1,16 @@
+package evolution.creatures.morphology.joints;
+
+import evolution.creatures.genetics.genetypes.ArticuloGene;
+import evolution.creatures.genetics.genetypes.ArticuloGene.ArticulationType;
+
+/**
+ * Rigid joint is basically no joint, but is used as rigid connector between two
+ * body parts
+ * 
+ * @author leviathan
+ * 
+ */
+
+public interface RigidJoint {
+
+}

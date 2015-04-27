@@ -1,0 +1,46 @@
+package genetics;
+
+public class Genotype {
+	/*
+	 * The genotype descriptions of virtual brains and the actual pheno- type
+	 * brains are both directed graphs of nodes and connections. The nodes
+	 * contain the sensors, neurons, and effectors, and the connec- tions define
+	 * the flow of signals between these nodes. These graphs can also be
+	 * recurrent, and as a result the final control system can have feedback
+	 * loops and cycles. However, most of these neural elements exist within a
+	 * specific part of the creature. Thus the genotype for the nervous system
+	 * is a nested graph: the morphological nodes each contain graphs of the
+	 * neural nodes and connections. Figure 3 shows an example of an evolved
+	 * nested graph. When a creature is synthesized from its genetic
+	 * description, the neural components described within each part are
+	 * generated along with the morphological structure. This causes blocks of
+	 * neural control circuitry to be replicated along with each instanced part,
+	 * so each duplicated segment or appendage of a creature can have a similar
+	 * but independent local control system. These local control systems can be
+	 * connected to enable the pos- sibility of coordinated control. Connections
+	 * are allowed between adjacent parts in the hierarchy: the neurons and
+	 * effectors within a part can receive signals from sensors or neurons in
+	 * their parent part or in their child parts. Creatures are also given a set
+	 * of neurons that are not associated with a specific part, and are copied
+	 * only once into the phenotype. This gives the opportunity for the
+	 * development of global synchro- nization or centralized control. These
+	 * neurons can receive signals from each other or from sensors or neurons in
+	 * specific instances of any of the creature’s parts, and the neurons and
+	 * effectors within the parts can optionally receive signals from these
+	 * unassociated-neu- ron outputs. In this way the genetic language for
+	 * morphology and control is merged. A local control system is described for
+	 * each type of part, and these are copied and connected into the hierarchy
+	 * of the creature’s body to make a complete distributed nervous system.
+	 * Figure 4a shows the creature morphology resulting from the genotype in
+	 * figure 3. Again, parameters describing shapes, recursive-limits, and
+	 * weights are not shown for the genotype even though they affect the
+	 * phenotype. Some groups have similar neural systems because they are
+	 * copies from the same genetic description. This creature can swim by
+	 * making cyclic paddling motions with four similar flippers. Note that it
+	 * can be difficult to analyze exactly how a control system such as this
+	 * works, and some components may not actually be used at all. Fortunately,
+	 * a primary benefit of using artificial evolution is that understanding
+	 * these representations is not necessary.
+	 */
+
+}

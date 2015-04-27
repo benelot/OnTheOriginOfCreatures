@@ -1,0 +1,30 @@
+package evolution.creatures.morphology.joints;
+
+import java.util.ArrayList;
+
+import com.jme3.bullet.joints.SixDofJoint;
+
+import configuration.PhysicsConfiguration;
+import evolution.creatures.genetics.genetypes.ArticuloGene;
+import evolution.creatures.genetics.genetypes.ArticuloGene.ArticulationType;
+import evolution.creatures.morphology.Component;
+
+public class RigidJointjME3 extends JointjME3 implements RigidJoint {
+
+	public RigidJointjME3(ArticuloGene gene) {
+		super(gene.getPosX1(), gene.getPosY1(), gene.getPosZ1(), gene.getNormalX1(), gene.getNormalY1(), gene.getNormalZ1(), gene.getDirX1(), gene.getDirY1(),
+				gene.getDirZ1(), gene.getPosX2(), gene.getPosY2(), gene.getPosZ2(), gene.getNormalX2(), gene.getNormalY2(), gene.getNormalZ2(),
+				gene.getDirX2(), gene.getDirY2(), gene.getDirZ2(), null, null, null, null, null, null);
+		setArticulationType(ArticulationType.RIGID);
+		joint.getRotationalLimitMotor(PhysicsConfiguration.PHYSICS_JOINT_PITCH).setTargetVelocity(0);
+		joint.getRotationalLimitMotor(PhysicsConfiguration.PHYSICS_JOINT_ROLL).setTargetVelocity(0);
+		joint.getRotationalLimitMotor(PhysicsConfiguration.PHYSICS_JOINT_YAW).setTargetVelocity(0);
+	}
+
+	private SixDofJoint joint;
+
+	@Override
+	public ArrayList<Component> getAllJointComponents() {
+		return new ArrayList<Component>();
+	}
+}

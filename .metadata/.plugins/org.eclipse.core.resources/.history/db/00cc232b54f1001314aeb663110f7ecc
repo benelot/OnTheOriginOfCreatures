@@ -1,0 +1,45 @@
+package evolution.creatures.morphology.joints;
+
+import com.jme3.bullet.joints.SixDofJoint;
+
+import configuration.PhysicsConfiguration;
+import evolution.creatures.genetics.genetypes.MusculoGene;
+
+public class JointjME3 extends Joint {
+
+	JointjME3(double posX1, double posY1, double posZ1, double normalX1, double normalY1, double normalZ1, double dirX1, double dirY1, double dirZ1,
+			double posX2, double posY2, double posZ2, double normalX2, double normalY2, double normalZ2, double dirX2, double dirY2, double dirZ2,
+			MusculoGene musculoGenePitchExt, MusculoGene musculoGenePitchFlex, MusculoGene musculoGeneYawExt, MusculoGene musculoGeneYawFlex,
+			MusculoGene musculoGeneRollExt, MusculoGene musculoGeneRollFlex) {
+		super(posX1, posY1, posZ1, normalX1, normalY1, normalZ1, dirX1, dirY1, dirZ1, posX2, posY2, posZ2, normalX2, normalY2, normalZ2, dirX2, dirY2, dirZ2,
+				musculoGenePitchExt, musculoGenePitchFlex, musculoGeneYawExt, musculoGeneYawFlex, musculoGeneRollExt, musculoGeneRollFlex);
+		// Joint with six degrees of freedom, we will only use 3 of them
+		
+				joint = new SixDofJoint(holderNode.getControl(RigidBodyControl.class), weightNode.getControl(RigidBodyControl.class), Vector3f.ZERO, new Vector3f(0f,
+						-1, 0f), true);
+				//TODO:Try to use SixDofSpringJoint
+
+				// fetch the reference for the rotational motors and enable them
+				
+				pitchMotor = joint1.getRotationalLimitMotor(PhysicsConfiguration.PHYSICS_JOINT_PITCH);
+				yawMotor = joint1.getRotationalLimitMotor(PhysicsConfiguration.PHYSICS_JOINT_ROLL);
+				rollMotor = joint1.getRotationalLimitMotor(PhysicsConfiguration.PHYSICS_JOINT_YAW);
+				pitchMotor.setEnableMotor(true);
+				yawMotor.setEnableMotor(true);
+				rollMotor.setEnableMotor(true);
+
+				// Default maxMotorForce is too weak to lift the weight node
+				pitchMotor.setMaxMotorForce(1);
+				yawMotor.setMaxMotorForce(1);
+				rollMotor.setMaxMotorForce(1);
+				
+
+				// physics simulation puts objects to sleep when moving slower than
+				// sleeping threshold. We do not want that.
+				//weightNodeControl.setAngularSleepingThreshold(0);
+				
+				//weightNodeControl.setGravity(new Vector3f((float) PhysicsConfiguration.PHYSICS_GRAVITY_X, (float) PhysicsConfiguration.PHYSICS_GRAVITY_Y,
+				//		(float) PhysicsConfiguration.PHYSICS_GRAVITY_Z));
+	}
+
+}

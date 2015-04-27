@@ -1,0 +1,17 @@
+package genetics;
+
+public class Genotype {
+	/*
+	 * The genotype descriptions of virtual brains and the actual pheno- type
+	 * brains are both directed graphs of nodes and connections. The nodes
+	 * contain the sensors, neurons, and effectors, and the connec- tions define
+	 * the flow of signals between these nodes. These graphs can also be
+	 * recurrent, and as a result the final control system can have feedback
+	 * loops and cycles. However, most of these neural elements exist within a
+	 * specific part of the creature. Thus the genotype for the nervous system
+	 * is a nested graph: the morphological nodes each contain graphs of the
+	 * neural nodes and connections. Figure 3 shows an example of an evolved
+	 * nested graph.
+	 */
+
+}
